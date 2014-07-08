@@ -68,7 +68,7 @@ public class BootStrap {
 
 //Create a list which can contain the classes that you want to run.
         List<XmlClass> myClasses = new ArrayList<XmlClass> ();
-        myClasses.add(new XmlClass("ExistingCodPlacement"));
+        myClasses.add(new XmlClass("SignupCODorder"));
 
 //Assign that to the XmlTest Object created earlier.
         myTest.setXmlClasses(myClasses);

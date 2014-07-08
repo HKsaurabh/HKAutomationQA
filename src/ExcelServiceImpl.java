@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+
 /**
  * Created with IntelliJ IDEA.
  * User: Saurabh
@@ -16,7 +17,7 @@ import java.util.List;
  * Time: 1:19 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ReadExcel {
+public class ExcelServiceImpl {
     public List<String> mainReadFromExcelIterator(String fileName) throws FileNotFoundException, IOException {
 
         int sheetNo = 0;
@@ -38,8 +39,6 @@ public class ReadExcel {
                 HSSFRow row = (HSSFRow) rows.next();
                 System.out.println("\n");
                 Iterator cells = row.cellIterator();
-
-
 
                 while (cells.hasNext()) {
                     if (cellCount <= 10) {
@@ -65,12 +64,38 @@ public class ReadExcel {
                 }
 
             }
-
         } catch (IOException ex) {
             ex.printStackTrace();
         }
         return readExcelData;
     }
 
+
+    public static boolean updateCellContent(String fileName, String dataToAppend, int cellRow, int cellColumn) {
+        boolean success = false;
+        int sheetNo = 0;
+        try {
+            InputStream input = new BufferedInputStream(new FileInputStream(fileName));
+            POIFSFileSystem fs = new POIFSFileSystem(input);
+            HSSFWorkbook wb = new HSSFWorkbook(fs);
+            HSSFSheet sheet = wb.getSheetAt(sheetNo);
+
+            HSSFCell cell = sheet.getRow(cellRow).getCell(cellColumn);
+            cell.setCellValue(dataToAppend + cell.getStringCellValue());
+
+            input.close();
+
+            FileOutputStream outFile = new FileOutputStream(new File(fileName));
+            wb.write(outFile);
+            outFile.close();
+
+            success = true;
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return success;
+    }
 
 }

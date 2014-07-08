@@ -50,38 +50,23 @@ public class SharedProperties {
             driver.get(AppURL);
         }
     }
-    public static void sendKeys(String elementXpath, String elementObjectName, String currentPage,  String value, WebDriver driver) {
+    public static void sendKeys(String elementXpath,  String value, WebDriver driver) {
         driver.findElement(By.xpath(elementXpath)).sendKeys(value);
 
     }
-    public static void Click(String elementXpath, String elementObjectName, String currentPage, WebDriver driver)  {
+    public static void Click(String elementXpath, WebDriver driver)  {
         driver.findElement(By.xpath(elementXpath)).click();
-       // checkHttpResponse(driver.getCurrentUrl());
+
     }
 
     public static void clear(String elementXpath,  WebDriver driver)  {
         driver.findElement(By.xpath(elementXpath)).clear();
-        // checkHttpResponse(driver.getCurrentUrl());
+
     }
 
-    public static void Click2(String CSSSelector, String elementObjectName, String currentPage, WebDriver driver)  {
+    public static void Click2(String CSSSelector, WebDriver driver)  {
         driver.findElement(By.cssSelector(CSSSelector)).click();
-        // checkHttpResponse(driver.getCurrentUrl());
+
     }
-
-    public static boolean checkHttpResponse(String testUrl) throws IOException {
-        URL url = new URL(testUrl);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        connection.connect();
-
-        int code = connection.getResponseCode();
-        System.out.println("Response code of the object is " + code);
-        if (code == 200) {
-            return true;
-        } else
-            return false;
-    }
-
 
 }

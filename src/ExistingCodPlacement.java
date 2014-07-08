@@ -12,7 +12,6 @@ import org.testng.annotations.Test;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -32,8 +31,8 @@ public class ExistingCodPlacement extends SharedProperties {
     CartPage cartpage = new CartPage();
     AddressPage addresspage = new AddressPage();
     PaymentPage paymentpage = new PaymentPage();
-    ReadExcel readexcel = new ReadExcel();
-
+    ExcelServiceImpl readexcel = new ExcelServiceImpl();
+    MainPropertyFile mainproperty = new MainPropertyFile();
     @Parameters({"BaseURL", "Browser"})
     @BeforeClass
     public void g(String baseUrl, String browser) {
@@ -49,8 +48,8 @@ public class ExistingCodPlacement extends SharedProperties {
         try{
 
 
-            finalObjectString.addAll(readexcel.mainReadFromExcelIterator("E:\\Healthkart\\MainAutoQa\\Automation_testing_v4\\LogIn1.xls"));
-            finalObjectString.addAll(readexcel.mainReadFromExcelIterator("E:\\Healthkart\\MainAutoQa\\Automation_testing_v4\\productId.xls"));
+            finalObjectString.addAll(readexcel.mainReadFromExcelIterator(mainproperty.readPropertyLoginExcelPath()));
+            finalObjectString.addAll(readexcel.mainReadFromExcelIterator(mainproperty.readPropertyProductIdExcelPath()));
             result.add(new Object[]{finalObjectString});
 
             System.out.println("List iterator : "+result.iterator());
@@ -73,7 +72,8 @@ public class ExistingCodPlacement extends SharedProperties {
         Thread.sleep(3000);
 
         for(int i=4;i<dataArray.size();i++){
-            driver.navigate().to("http://www.centralhk.com:9090/sv/on-%28optimum-nutrition%29-gold-standard-100-whey-protein/SP-9558?navKey=VRNT-"+dataArray.get(i));
+
+            driver.navigate().to(mainproperty.readProperty()+dataArray.get(i));
             WebElement buyNow = driver.findElement(By.cssSelector("input[class='addToCart btn btn-blue btn2 mrgn-b-5 disp-inln']"));
             buyNow.click();
 
@@ -88,31 +88,32 @@ public class ExistingCodPlacement extends SharedProperties {
         WebElement cartLink = wait.until( ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a[href*='Cart.action']")));
         cartLink.click();
 
-        Click(cartpage.proceedToCheckout(), "Login to checkout", "Cart Page", driver);
-        Click(loginPage.getSignInBtn(), "Create an account button", "Sign in page", driver);
+        Click(cartpage.proceedToCheckout(), driver);
+        Click(loginPage.getSignInBtn(),driver);
         Thread.sleep(3000);
 
-        sendKeys(loginPage.getEmailIdTextBox(), "Login page", "Enter username", dataArray.get(0), driver);
-        sendKeys(loginPage.getPasswordTextBox(), "Login page", "Enter password", dataArray.get(1), driver);
-        Click(loginPage.getSignInBtn(), "Login page", "Sign in Button", driver);
+        sendKeys(loginPage.getEmailIdTextBox(), dataArray.get(0), driver);
+        sendKeys(loginPage.getPasswordTextBox(), dataArray.get(1), driver);
+        Click(loginPage.getSignInBtn(), driver);
         Thread.sleep(5000);
         clear(loginPage.getEmailIdTextBox(),driver);
 
-        sendKeys(loginPage.getEmailIdTextBox(), "Login page", "Enter username", dataArray.get(2), driver);
-        sendKeys(loginPage.getPasswordTextBox(), "Login page", "Enter password", dataArray.get(3), driver);
-        Click(loginPage.getSignInBtn(), "Login page", "Sign in page", driver);
+        sendKeys(loginPage.getEmailIdTextBox(), dataArray.get(2), driver);
+        sendKeys(loginPage.getPasswordTextBox(), dataArray.get(3), driver);
+        Click(loginPage.getSignInBtn(), driver);
         Thread.sleep(5000);
+
         //Code to add more quantity
         //code to redeem reward points
         //code to add coupons
 
-        Click(cartpage.proceedToCheckout(), "Cart Page", "CArt", driver);
+        Click(cartpage.proceedToCheckout(), driver);
         Thread.sleep(2000);
-        Click(addresspage.addressPage(), "Login page", "Sign in page", driver);
+        Click(addresspage.addressPage(), driver);
         Thread.sleep(5000);
-        Click(paymentpage.cashOnDelivery(), "COD tab", "payment page", driver);
+        Click(paymentpage.cashOnDelivery(), driver);
         Thread.sleep(5000);
-        Click(paymentpage.payOnDelivery(), "finally cod", "paymnet page", driver);
+        Click(paymentpage.payOnDelivery(), driver);
 
 
 

@@ -2,7 +2,6 @@ import com.google.common.collect.Lists;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -32,7 +31,9 @@ public class SignupCODorder extends SharedProperties{
     CartPage cartpage = new CartPage();
     AddressPage addresspage = new AddressPage();
     PaymentPage paymentpage = new PaymentPage();
-    ReadExcel readexcel =new ReadExcel();
+    ExcelServiceImpl readexcel =new ExcelServiceImpl();
+    MainPropertyFile mainproperty = new MainPropertyFile();
+
 
     @Parameters({"BaseURL", "Browser"})
     @BeforeClass
@@ -49,8 +50,8 @@ public class SignupCODorder extends SharedProperties{
         try{
 
 
-            finalObjectString.addAll(readexcel.mainReadFromExcelIterator("C:\\selenium\\Automation_testing_v4\\signup.xls"));
-            finalObjectString.addAll(readexcel.mainReadFromExcelIterator("C:\\selenium\\Automation_testing_v4\\productId.xls"));
+            finalObjectString.addAll(readexcel.mainReadFromExcelIterator(mainproperty.readPropertySignUpExcelPath()));
+            finalObjectString.addAll(readexcel.mainReadFromExcelIterator(mainproperty.readPropertyProductIdExcelPath()));
             result.add(new Object[]{finalObjectString});
 
             System.out.println("List iterator : "+result.iterator());
@@ -72,13 +73,6 @@ public class SignupCODorder extends SharedProperties{
     @Test(dataProvider = "CombinedData", enabled = true)
     public void login(List<String> dataArray)  throws InterruptedException, IOException {
         openBrowser(baseUrl, browser);
-       /* System.out.println("username: "  +dataArray.get(0));
-        System.out.println("Password: "  +dataArray.get(1));*/
-
-
-/*        System.out.println("Email Xpath: "  +loginPage.getEmailIdTextBox());
-        System.out.println("Password Xpath: "  +loginPage.getPasswordTextBox());
-        System.out.println("SignIn Xpath: "  +loginPage.getSignInBtn());*/
 
         Thread.sleep(7000);
 
@@ -94,7 +88,7 @@ public class SignupCODorder extends SharedProperties{
 */
 
         for(int i=4;i<dataArray.size();i++){
-            driver.navigate().to("http://www.centralhk.com:9090/sv/on-%28optimum-nutrition%29-gold-standard-100-whey-protein/SP-9558?navKey=VRNT-"+dataArray.get(i));
+            driver.navigate().to(mainproperty.readProperty()+dataArray.get(i));
             WebElement buyNow = driver.findElement(By.cssSelector("input[class='addToCart btn btn-blue btn2 mrgn-b-5 disp-inln']"));
             buyNow.click();
 
@@ -115,23 +109,25 @@ public class SignupCODorder extends SharedProperties{
         //code to redeem reward points
         //code to add coupons
 
-        Click(cartpage.proceedToCheckout(), "Login to checkout", "Cart Page", driver);
+        Click(cartpage.proceedToCheckout(), driver);
         Thread.sleep(2000);
-        Click(signupage.signupPage(), "Create an account button", "Sign up page", driver);
-        sendKeys(signupage.name(), "SignupPage page", "Enter name", dataArray.get(0), driver);
-        sendKeys(signupage.emailid(), "SignupPage page", "Enter email", dataArray.get(1), driver);
-        sendKeys(signupage.password(), "SignupPage page", "Enter password", dataArray.get(2), driver);
-        sendKeys(signupage.confirmpassword(), "SignupPage page", "Enter confirmpassword", dataArray.get(3), driver);
-        Click(signupage.createaccount(), "Create an account", "Sign up page", driver);
+        Click(signupage.signupPage(),  driver);
+        sendKeys(signupage.name(), dataArray.get(0), driver);
+        sendKeys(signupage.emailid(),  dataArray.get(1), driver);
+        sendKeys(signupage.password(),  dataArray.get(2), driver);
+        sendKeys(signupage.confirmpassword(),  dataArray.get(3), driver);
+        Click(signupage.createaccount(),  driver);
+        ExcelServiceImpl.updateCellContent(mainproperty.readPropertySignUpExcelPath(),"1",0,1);
+
         Thread.sleep(2000);
-        Click(cartpage.proceedToCheckout(), "Proceed to checkout", "Cart Page", driver);
+        Click(cartpage.proceedToCheckout(),  driver);
         Thread.sleep(2000);
-        sendKeys(addresspage.name(), "Address page", "Name", "Nitin" , driver);
-        sendKeys(addresspage.mobile(), "Address page", "Mobile", "9999999999" , driver);
-        sendKeys(addresspage.address(), "Address page", "Name", "Test" , driver);
-        sendKeys(addresspage.pincode(), "Address page", "Name", "122001" , driver);
+        sendKeys(addresspage.name(),"Nitin" , driver);
+        sendKeys(addresspage.mobile(),  "9999999999" , driver);
+        sendKeys(addresspage.address(),  "Test" , driver);
+        sendKeys(addresspage.pincode(),  "122001" , driver);
         Thread.sleep(2000);
-        Click(addresspage.delivertoaddress(), "Deliver to this address", "Address Page", driver);
+        Click(addresspage.delivertoaddress(),  driver);
         Thread.sleep(5000);
 
 
@@ -144,8 +140,8 @@ public class SignupCODorder extends SharedProperties{
             }
         }*/
 
-        Click(paymentpage.cashOnDelivery(), "COD tab", "payment page", driver);
+        Click(paymentpage.cashOnDelivery(),  driver);
         Thread.sleep(5000);
-        Click(paymentpage.payOnDelivery(), "finally cod", "paymnet page", driver);
+        Click(paymentpage.payOnDelivery(),  driver);
     }
 }
