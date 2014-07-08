@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [TestNG Test]">
+  <parameter name="Browser" value="chrome"/>
+  <parameter name="BaseURL" value="http://www.centarlhk.com:9090"/>
+  <test name="ASQA Sample Test(failed)">
+    <classes>
+      <class name="ExistingCodPlacement">
+        <methods>
+          <include name="login" invocation-numbers="0"/>
+          <include name="g"/>
+        </methods>
+      </class> <!-- ExistingCodPlacement -->
+    </classes>
+  </test> <!-- ASQA Sample Test(failed) -->
+</suite> <!-- Failed suite [TestNG Test] -->
